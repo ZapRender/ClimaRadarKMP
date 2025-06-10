@@ -1,0 +1,14 @@
+<resources>
+    <string name="weather">Weather</string>
+    <string name="locations">Locations</string>
+    <string name="events">Events</string>
+    <string name="favorites">Favorites</string>
+    <string name="search_locations">Search Locations</string>
+    <string name="past_days">Past 5 Days</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="2_days_ago">2 days ago</string>
+    <string name="3_days_ago">2 days ago</string>
+    <string name="4_days_ago">2 days ago</string>
+    <string name="weather_events">Weather Events</string>
+</resources>
