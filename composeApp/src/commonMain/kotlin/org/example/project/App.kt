@@ -1,5 +1,11 @@
 package org.example.project
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,13 +44,18 @@ fun App() {
         Surface(
             modifier = Modifier.fillMaxSize(),
         ) {
-            TabNavigator(HomeTab) {
+            TabNavigator(HomeTab) { tabNavigator ->
                 Scaffold(
                     topBar = { topBar() },
                     bottomBar = { navigationBar() }
                 ) { paddingValues ->
                     Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-                        CurrentTab()
+                        AnimatedContent(
+                            targetState = tabNavigator.current,
+                            label = "BottomBarTransition",
+                        ){tab ->
+                            tab.Content()
+                        }
                     }
                 }
 
