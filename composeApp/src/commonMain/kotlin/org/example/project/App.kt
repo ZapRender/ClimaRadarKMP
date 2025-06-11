@@ -1,6 +1,7 @@
 package org.example.project
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,22 +16,20 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import kotlinproject.composeapp.generated.resources.Res
-import kotlinproject.composeapp.generated.resources.events
-import kotlinproject.composeapp.generated.resources.favorites
-import kotlinproject.composeapp.generated.resources.ic_calendar_filled
-import kotlinproject.composeapp.generated.resources.ic_calendar_outlined
-import kotlinproject.composeapp.generated.resources.ic_favorites_filled
-import kotlinproject.composeapp.generated.resources.ic_favorites_outlined
-import kotlinproject.composeapp.generated.resources.ic_locations_filled
-import kotlinproject.composeapp.generated.resources.ic_locations_outlined
-import kotlinproject.composeapp.generated.resources.locations
 import kotlinproject.composeapp.generated.resources.weather
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.example.project.core.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.resources.vectorResource
 import androidx.compose.material3.Scaffold
-import org.example.project.presentation.screen.Favorites
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import cafe.adriel.voyager.navigator.tab.CurrentTab
+import cafe.adriel.voyager.navigator.tab.LocalTabNavigator
+import cafe.adriel.voyager.navigator.tab.Tab
+import cafe.adriel.voyager.navigator.tab.TabNavigator
+import org.example.project.presentation.screen.FavoriteTab
+import org.example.project.presentation.screen.HomeTab
+import org.example.project.presentation.screen.PastDaysTab
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 @Preview
@@ -39,13 +38,16 @@ fun App() {
         Surface(
             modifier = Modifier.fillMaxSize(),
         ) {
-            Scaffold(
-                topBar = { topBar() },
-                bottomBar = { navigationBar() }
-            ) { paddingValues ->
-                Box(modifier = Modifier.fillMaxSize().padding(paddingValues)){
-                    Favorites()
+            TabNavigator(HomeTab) {
+                Scaffold(
+                    topBar = { topBar() },
+                    bottomBar = { navigationBar() }
+                ) { paddingValues ->
+                    Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+                        CurrentTab()
+                    }
                 }
+
             }
         }
     }
@@ -57,7 +59,7 @@ fun topBar(
 ) {
     TopAppBar(
         title = {
-            Box{
+            Box {
                 Text(stringResource(Res.string.weather))
             }
         },
@@ -71,66 +73,55 @@ fun topBar(
 @Composable
 fun navigationBar(
 ) {
-    val selectedIcons = listOf(
-        vectorResource(Res.drawable.ic_calendar_filled),
-        vectorResource(Res.drawable.ic_locations_filled),
-        vectorResource(Res.drawable.ic_favorites_filled)
-    )
-
-    val unselectedIcons = listOf(
-        vectorResource(Res.drawable.ic_calendar_outlined),
-        vectorResource(Res.drawable.ic_locations_outlined),
-        vectorResource(Res.drawable.ic_favorites_outlined)
-    )
-
-
     NavigationBar(
         content = {
-            NavigationBarItem(
-                icon = {
-                    Icon(vectorResource(
-                        Res.drawable.ic_calendar_outlined),
-                        "",
-                    )
-
-                },
-                selected = false,
-                onClick = { /* Handle click */ },
-                label = {
-                    Text(stringResource(Res.string.events))
-                }
-
-            )
-            NavigationBarItem(
-                icon = {
-                    Icon(vectorResource(
-                        Res.drawable.ic_locations_outlined),
-                        "",
-                    )
-
-                },
-                selected = false,
-                onClick = { /* Handle click */ },
-                label = {
-                    Text(stringResource(Res.string.locations))
-                }
-
-            )
-            NavigationBarItem(
-                icon = {
-                    Icon(vectorResource(
-                        Res.drawable.ic_favorites_outlined),
-                        "",
-                    )
-
-                },
-                selected = false,
-                onClick = { /* Handle click */ },
-                label = {
-                    Text(stringResource(Res.string.favorites))
-                }
-            )
+            listOf(FavoriteTab, HomeTab, PastDaysTab).forEach { tab ->
+                TabNavigationBarItem(tab)
+            }
         },
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
+    )
+}
+
+@Composable
+private fun RowScope.TabNavigationBarItem(tab: Tab) {
+    val tabNavigator = LocalTabNavigator.current
+    val selected = tabNavigator.current == tab
+
+    val iconRes = when (tab) {
+        is HomeTab -> if (selected) tab.filledIcon else tab.outlinedIcon
+        is FavoriteTab -> if (selected) tab.filledIcon else tab.outlinedIcon
+        is PastDaysTab -> if (selected) tab.filledIcon else tab.outlinedIcon
+        else -> null
+    }
+
+    val labelRes = when (tab) {
+        is HomeTab -> tab.label
+        is FavoriteTab -> tab.label
+        is PastDaysTab -> tab.label
+        else -> null
+    }
+
+
+    NavigationBarItem(
+        selected = false,
+        onClick = { tabNavigator.current = tab },
+        icon = {
+            iconRes?.let { icon ->
+                Icon(
+                    painter = rememberVectorPainter(vectorResource(icon)),
+                    contentDescription = null,
+                    tint = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        },
+        label = {
+            labelRes?.let {
+                Text(
+                    stringResource(it),
+                    color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
     )
 }

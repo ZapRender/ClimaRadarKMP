@@ -12,9 +12,47 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.tab.Tab
+import cafe.adriel.voyager.navigator.tab.TabOptions
+import kotlinproject.composeapp.generated.resources.Res
+import kotlinproject.composeapp.generated.resources.events
+import kotlinproject.composeapp.generated.resources.ic_calendar_filled
+import kotlinproject.composeapp.generated.resources.ic_calendar_outlined
+import kotlinproject.composeapp.generated.resources.past_days
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
+
+object PastDaysTab : Tab{
+    val filledIcon = Res.drawable.ic_calendar_filled
+    val outlinedIcon = Res.drawable.ic_calendar_outlined
+    val label = Res.string.events
+
+    override val options: TabOptions
+        @Composable
+        get() {
+            val icon = rememberVectorPainter(vectorResource(outlinedIcon))
+            val title = stringResource(Res.string.past_days)
+
+            return remember {
+                TabOptions(
+                    index = 2u,
+                    title = title,
+                    icon = icon,
+                )
+
+            }
+        }
+    @Composable
+    override fun Content() {
+        PastDays()
+    }
+
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
