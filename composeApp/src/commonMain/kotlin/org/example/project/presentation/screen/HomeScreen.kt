@@ -25,6 +25,7 @@ import kotlinproject.composeapp.generated.resources.Res
 import kotlinproject.composeapp.generated.resources.ic_favorites_outlined
 import kotlinproject.composeapp.generated.resources.ic_locations_outlined
 import kotlinproject.composeapp.generated.resources.weather_events
+import org.example.project.presentation.components.WeatherEventsItem
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -67,29 +68,3 @@ fun WeatherEvents(){
 
     }
 }
-
-@Composable
-@Preview
-fun WeatherEventsItem(icon: ImageVector, title: String, description: String) {
-    Row(modifier = Modifier.padding(vertical = 12.dp).fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically) {
-        Box(modifier = Modifier.fillMaxHeight()
-            .clip(shape = MaterialTheme.shapes.small)
-            .background(color = MaterialTheme.colorScheme.surfaceVariant)
-            .padding(12.dp)
-           ) {
-            Icon(icon, contentDescription = null)
-        }
-        Box(modifier = Modifier.width(16.dp))
-        Column {
-            Text(text = title, style = MaterialTheme.typography.titleMedium)
-            Text(text = description, style = MaterialTheme.typography.titleSmall)
-        }
-        Box(modifier = Modifier.weight(1f).fillMaxWidth(),
-            contentAlignment = Alignment.CenterEnd){
-            Icon(vectorResource(Res.drawable.ic_favorites_outlined), "")
-        }
-    }
-
-}
-

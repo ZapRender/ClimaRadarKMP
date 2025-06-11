@@ -30,7 +30,7 @@ import org.example.project.core.theme.AppTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import androidx.compose.material3.Scaffold
-import org.example.project.presentation.screen.PastDays
+import org.example.project.presentation.screen.Favorites
 
 @Composable
 @Preview
@@ -44,7 +44,7 @@ fun App() {
                 bottomBar = { navigationBar() }
             ) { paddingValues ->
                 Box(modifier = Modifier.fillMaxSize().padding(paddingValues)){
-                    PastDays()
+                    Favorites()
                 }
             }
         }
