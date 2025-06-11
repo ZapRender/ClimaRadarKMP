@@ -1,6 +1,8 @@
 package org.example.project
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,10 +27,10 @@ import kotlinproject.composeapp.generated.resources.locations
 import kotlinproject.composeapp.generated.resources.weather
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.example.project.core.theme.AppTheme
-import org.example.project.presentation.screen.HomeScreen
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.resources.vectorResource
 import androidx.compose.material3.Scaffold
+import org.example.project.presentation.screen.PastDays
 
 @Composable
 @Preview
@@ -41,7 +43,9 @@ fun App() {
                 topBar = { topBar() },
                 bottomBar = { navigationBar() }
             ) { paddingValues ->
-                HomeScreen(paddingValues)
+                Box(modifier = Modifier.fillMaxSize().padding(paddingValues)){
+                    PastDays()
+                }
             }
         }
     }
@@ -52,7 +56,11 @@ fun App() {
 fun topBar(
 ) {
     TopAppBar(
-        title = {Text(stringResource(Res.string.weather))},
+        title = {
+            Box{
+                Text(stringResource(Res.string.weather))
+            }
+        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background,
         )
