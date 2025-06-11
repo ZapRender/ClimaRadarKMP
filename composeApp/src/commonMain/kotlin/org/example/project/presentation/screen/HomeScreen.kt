@@ -45,7 +45,6 @@ object HomeTab : Tab{
                     title = title,
                     icon = icon,
                 )
-
             }
         }
     @Composable
@@ -54,7 +53,6 @@ object HomeTab : Tab{
     }
 
 }
-
 
 @Composable
 fun HomeScreen() {
